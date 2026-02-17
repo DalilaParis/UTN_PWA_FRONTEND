@@ -19,8 +19,8 @@ const LoginScreen = () => {
         <div className="auth-container">
             <div className="auth-card">
                 <div className="auth-header">
-                    <h1>Slaque</h1>
-                    <p>Sign in to your workspace</p>
+                    <h1>Slack</h1>
+                    <p>Inicia sesion en tu workspace</p>
                 </div>
                 <form onSubmit={onSubmitForm} className="auth-form">
                     <div>
@@ -49,11 +49,11 @@ const LoginScreen = () => {
                         error && <div style={{ color: '#e01e5a', marginBottom: '10px' }}>{error.message}</div>
                     }
                     <button type="submit" className="btn-primary" disabled={loading || (response && response.ok)}>
-                        {loading ? 'Signing in...' : 'Sign In'}
+                        {loading ? 'Iniciando sesion...' : 'Iniciar sesion'}
                     </button>
                 </form>
                 <div className="auth-footer">
-                    New to Slaque? <Link to="/register">Create an account</Link>
+                    ¿Nuevo en Slack? <Link to="/register">Crear una cuenta</Link>
                 </div>
             </div>
         </div>

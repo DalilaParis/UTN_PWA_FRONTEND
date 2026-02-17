@@ -17,13 +17,13 @@ const CreateWorkspaceScreen = () => {
         <div className="auth-container">
             <div className="auth-card" style={{ maxWidth: '600px' }}>
                 <div className="auth-header">
-                    <h1>Create a new workspace</h1>
-                    <p>Workspaces are your way to communicate.</p>
+                    <h1>Crear nuevo workspace</h1>
+                    <p>Usa tu workspace para charlar!</p>
                 </div>
 
                 <form className="auth-form" onSubmit={onSubmitForm}>
                     <div>
-                        <label htmlFor="title">Workspace Name</label>
+                        <label htmlFor="title">Nombre del workspace</label>
                         <input
                             type="text"
                             id="title"
@@ -37,7 +37,7 @@ const CreateWorkspaceScreen = () => {
                     </div>
 
                     <div>
-                        <label htmlFor="image">Workspace Icon URL (Optional)</label>
+                        <label htmlFor="image">URL del icono del workspace (Opcional)</label>
                         <input
                             type="text"
                             id="image"
@@ -50,11 +50,11 @@ const CreateWorkspaceScreen = () => {
                     </div>
 
                     <div>
-                        <label htmlFor="description">Description</label>
+                        <label htmlFor="description">Descripción</label>
                         <textarea
                             id="description"
                             name="description"
-                            placeholder="What is this workspace about?"
+                            placeholder="¿De qué se trata este workspace?"
                             value={form_state.description}
                             onChange={onChangeFieldValue}
                             disabled={isLoading}
@@ -77,12 +77,12 @@ const CreateWorkspaceScreen = () => {
                     {error && <div style={{ color: '#e01e5a', marginBottom: '10px' }}>Error: {error.message}</div>}
 
                     <button type="submit" className="btn-primary" disabled={form_state.description.length > 1000 || isLoading}>
-                        {isLoading ? 'Creating...' : 'Create Workspace'}
+                        {isLoading ? 'Creando...' : 'Crear Workspace'}
                     </button>
                 </form>
 
                 <div className="auth-footer">
-                    <Link to="/home">Back to workspaces</Link>
+                    <Link to="/home">Volver a workspaces</Link>
                 </div>
             </div>
         </div>

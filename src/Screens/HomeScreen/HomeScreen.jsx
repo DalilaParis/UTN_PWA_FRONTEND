@@ -11,14 +11,14 @@ const HomeScreen = () => {
 
 
     if (workspace_list_loading || !workspace_list) {
-        return <span>Loading...</span>
+        return <span>Cargando...</span>
     }
 
     return (
         <div className="home-container">
             <div className="home-header">
-                <h1>Welcome back</h1>
-                <Link to="/create-workspace" className="btn-primary">Create a new workspace</Link>
+                <h1>Bienvenido</h1>
+                <Link to="/create-workspace" className="btn-primary">Crear nuevo workspace</Link>
             </div>
 
             {
@@ -44,13 +44,13 @@ const HomeScreen = () => {
                                     )}
                                     <div>
                                         <h3 style={{ margin: 0 }}>{workspace.workspace_title}</h3>
-                                        <p style={{ color: '#616061', margin: '5px 0 0 0', fontSize: '0.9rem' }}>Open Workspace</p>
+                                        <p style={{ color: '#616061', margin: '5px 0 0 0', fontSize: '0.9rem' }}>Abrir Workspace</p>
                                     </div>
                                 </div>
                             </Link>
                         ))
                     ) : (
-                        <span>No workspaces found. Create one to get started!</span>
+                        <span>No hay ningun workspace aun. Presiona el boton para crear uno!</span>
                     )
                 }
             </div>

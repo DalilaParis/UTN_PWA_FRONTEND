@@ -39,14 +39,14 @@ const WorkspaceScreen = () => {
         setInviteStatus(null)
         try {
             await inviteUser(workspace._id, inviteEmail)
-            setInviteStatus({ type: 'success', message: 'Invitation sent!' })
+            setInviteStatus({ type: 'success', message: 'Invitación enviada!' })
             setInviteEmail('')
             setTimeout(() => {
                 setShowInviteModal(false)
                 setInviteStatus(null)
             }, 2000)
         } catch (err) {
-            setInviteStatus({ type: 'error', message: err.message || 'Failed to invite user.' })
+            setInviteStatus({ type: 'error', message: err.message || 'Error al enviar invitación.' })
         }
     }
 
@@ -57,20 +57,20 @@ const WorkspaceScreen = () => {
             const response = await getMembers(workspace._id)
             setMembers(response.data.members)
         } catch (err) {
-            console.error("Failed to fetch members", err)
+            console.error("Error al obtener miembros", err)
         } finally {
             setMembersLoading(false)
         }
     }
 
     const handleDeleteWorkspace = async () => {
-        if (window.confirm('Are you sure you want to delete this workspace? This action cannot be undone.')) {
+        if (window.confirm('¿Estás seguro de que quieres eliminar este workspace? Esta acción no se puede deshacer.')) {
             try {
                 await deleteWorkspace(workspace._id)
                 refreshWorkspaces()
                 navigate('/home')
             } catch (err) {
-                alert('Failed to delete workspace: ' + (err.message || 'Unknown error'))
+                alert('Error al eliminar workspace: ' + (err.message || 'Error desconocido'))
             }
         }
     }
@@ -82,9 +82,9 @@ const WorkspaceScreen = () => {
         }
     }, [channels, selectedChannelId])
 
-    if (workspaceLoading) return <span>Loading workspace...</span>
-    if (workspaceError) return <span>Error loading workspace: {workspaceError.message}</span>
-    if (!workspace) return <span>Workspace not found</span>
+    if (workspaceLoading) return <span>Cargando workspace...</span>
+    if (workspaceError) return <span>Error al cargar workspace: {workspaceError.message}</span>
+    if (!workspace) return <span>Workspace no encontrado</span>
 
     return (
         <div className="workspace-container">
@@ -283,10 +283,10 @@ const WorkspaceScreen = () => {
                                         background: '#e01e5a', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', width: '100%'
                                     }}
                                 >
-                                    Delete Workspace
+                                    Eliminar Workspace
                                 </button>
                                 <div style={{ textAlign: 'center', fontSize: '0.8rem', color: '#616061', marginTop: '5px' }}>
-                                    Warning: This action cannot be undone.
+                                    Advertencia: Esta acción no se puede deshacer.
                                 </div>
                             </div>
                         )}

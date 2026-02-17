@@ -47,7 +47,7 @@ const useWorkspaceDetails = () => {
             const channelsData = await channelsRequest.sendRequest(() => getChannels(workspace_id))
             setChannels(channelsData.data.channels)
         } catch (err) {
-            console.error("Failed to create channel", err)
+            console.error("Fallo al crear canal", err)
         }
     }
 

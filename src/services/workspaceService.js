@@ -21,7 +21,7 @@ export async function createChannel(workspace_id, name) {
 }
 
 export async function inviteUser(workspace_id, email) {
-    return await http.post(`/api/workspace/${workspace_id}/members`, { email, role: 'user' })
+    return await http.post(`/api/workspace/${workspace_id}/members`, { email, role: 'User' })
 }
 
 export async function getMembers(workspace_id) {
