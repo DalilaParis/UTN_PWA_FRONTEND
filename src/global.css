@@ -39,6 +39,10 @@ button {
     cursor: pointer;
 }
 
+.mobile-header {
+    display: none;
+}
+
 .btn-primary {
     background-color: var(--slack-green);
     color: white;
@@ -156,8 +160,8 @@ label {
 }
 
 .workspace-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
 }
 
@@ -171,6 +175,9 @@ label {
     display: flex;
     flex-direction: column;
     height: 150px;
+    width: calc(33.333% - 14px);
+    /* Default 3 columns */
+    min-width: 250px;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -181,7 +188,6 @@ label {
 .workspace-card:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-color: var(--slack-border);
-    /* Keep border or change */
     text-decoration: none;
 }
 
@@ -189,4 +195,63 @@ label {
     margin: 0;
     font-size: 1.2rem;
     font-weight: bold;
+}
+
+/* Responsiveness Targets: 320px, 750px, 3840px */
+
+/* Mobile / Small Screens (from 320px) */
+@media (max-width: 750px) {
+    .mobile-header {
+        display: flex;
+    }
+
+    .home-header {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+
+    .workspace-list {
+        flex-direction: column;
+    }
+
+    .workspace-card {
+        width: 100%;
+    }
+
+    .auth-card {
+        padding: 10px;
+        max-width: 320px;
+    }
+
+    .auth-header h1 {
+        font-size: 2rem;
+    }
+}
+
+/* Large Screens / 4K (up to 3840px) */
+@media (min-width: 2560px) {
+    .mobile-header {
+        display: none;
+    }
+
+    .home-container {
+        max-width: 1600px;
+    }
+
+    .workspace-card {
+        width: calc(25% - 15px);
+        /* 4 columns on very large screens */
+        height: 200px;
+    }
+}
+
+@media (min-width: 3840px) {
+    .mobile-header {
+        display: none;
+    }
+
+    .home-container {
+        max-width: 2000px;
+    }
 }

@@ -40,5 +40,48 @@ export const http = {
         }
         return response
     },
-    // Add other methods if needed (PUT, DELETE, etc.)
+    put: async (endpoint, body) => {
+        const response_http = await fetch(
+            URL_API + endpoint,
+            {
+                method: 'PUT',
+                headers: getHeaders(),
+                body: JSON.stringify(body)
+            }
+        )
+        const response = await response_http.json()
+        if (!response.ok) {
+            throw new ServerError(response.message, response.status)
+        }
+        return response
+    },
+    patch: async (endpoint, body) => {
+        const response_http = await fetch(
+            URL_API + endpoint,
+            {
+                method: 'PATCH',
+                headers: getHeaders(),
+                body: JSON.stringify(body)
+            }
+        )
+        const response = await response_http.json()
+        if (!response.ok) {
+            throw new ServerError(response.message, response.status)
+        }
+        return response
+    },
+    delete: async (endpoint) => {
+        const response_http = await fetch(
+            URL_API + endpoint,
+            {
+                method: 'DELETE',
+                headers: getHeaders(),
+            }
+        )
+        const response = await response_http.json()
+        if (!response.ok) {
+            throw new ServerError(response.message, response.status)
+        }
+        return response
+    },
 }

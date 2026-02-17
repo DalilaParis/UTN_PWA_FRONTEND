@@ -6,6 +6,7 @@ import { getWorkspaceById, getChannels, createChannel } from '../services/worksp
 const useWorkspaceDetails = () => {
     const { workspace_id } = useParams()
     const [workspace, setWorkspace] = useState(null)
+    const [member, setMember] = useState(null)
     const [channels, setChannels] = useState([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(null)
@@ -22,6 +23,7 @@ const useWorkspaceDetails = () => {
                 // Fetch workspace details
                 const workspaceData = await workspaceRequest.sendRequest(() => getWorkspaceById(workspace_id))
                 setWorkspace(workspaceData.data.workspace)
+                setMember(workspaceData.data.member)
 
                 // Fetch channels
                 const channelsData = await channelsRequest.sendRequest(() => getChannels(workspace_id))
@@ -51,6 +53,7 @@ const useWorkspaceDetails = () => {
 
     return {
         workspace,
+        member,
         channels,
         loading: loading || workspaceRequest.loading || channelsRequest.loading,
         error: error || workspaceRequest.error || channelsRequest.error,

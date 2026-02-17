@@ -34,8 +34,19 @@ const HomeScreen = () => {
                                 key={workspace.workspace_id}
                                 className="workspace-card"
                             >
-                                <h3>{workspace.workspace_title}</h3>
-                                <p style={{ color: '#616061', marginTop: '10px' }}>Open Workspace</p>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '15px' }}>
+                                    {workspace.workspace_image ? (
+                                        <img src={workspace.workspace_image} alt={workspace.workspace_title} style={{ width: '50px', height: '50px', borderRadius: '8px', objectFit: 'cover' }} />
+                                    ) : (
+                                        <div style={{ width: '50px', height: '50px', borderRadius: '8px', backgroundColor: '#3F0E40', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold', fontSize: '1.5rem' }}>
+                                            {workspace.workspace_title.charAt(0).toUpperCase()}
+                                        </div>
+                                    )}
+                                    <div>
+                                        <h3 style={{ margin: 0 }}>{workspace.workspace_title}</h3>
+                                        <p style={{ color: '#616061', margin: '5px 0 0 0', fontSize: '0.9rem' }}>Open Workspace</p>
+                                    </div>
+                                </div>
                             </Link>
                         ))
                     ) : (

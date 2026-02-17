@@ -37,6 +37,19 @@ const CreateWorkspaceScreen = () => {
                     </div>
 
                     <div>
+                        <label htmlFor="image">Workspace Icon URL (Optional)</label>
+                        <input
+                            type="text"
+                            id="image"
+                            name="image"
+                            placeholder="https://example.com/logo.png"
+                            value={form_state.image}
+                            onChange={onChangeFieldValue}
+                            disabled={isLoading}
+                        />
+                    </div>
+
+                    <div>
                         <label htmlFor="description">Description</label>
                         <textarea
                             id="description"

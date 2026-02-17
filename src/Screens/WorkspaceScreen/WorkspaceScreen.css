@@ -279,3 +279,103 @@
     flex: 1;
     background-color: white;
 }
+
+/* Mobile Responsiveness (targets 750px and down to 320px) */
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--slack-text);
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-right: 15px;
+}
+
+@media (max-width: 750px) {
+    .workspace-container {
+        flex-direction: column;
+    }
+
+    .workspace-sidebar {
+        width: 100%;
+        height: auto;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+        height: 100vh;
+    }
+
+    .workspace-sidebar.show {
+        transform: translateX(0);
+    }
+
+    .workspace-main {
+        width: 100%;
+        margin-top: 60px;
+        /* Space for mobile header */
+        height: calc(100vh - 60px);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .mobile-header {
+        display: flex;
+        align-items: center;
+        padding: 0 15px;
+        height: 60px;
+        background-color: white;
+        border-bottom: 1px solid var(--slack-border);
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 90;
+    }
+
+    .mobile-menu-toggle {
+        display: block;
+    }
+
+    .channel-header {
+        display: none;
+        /* Mobile header replaces this */
+    }
+
+    .input-area-container {
+        padding: 0 10px 10px 10px;
+    }
+
+    .message-item {
+        padding: 8px 10px;
+    }
+}
+
+/* smallest screens (320px) */
+@media (max-width: 320px) {
+    .workspace-sidebar {
+        width: 100%;
+    }
+
+    .auth-card {
+        padding: 10px;
+    }
+}
+
+/* 4K Support (up to 3840px) */
+@media (min-width: 2560px) {
+    .workspace-sidebar {
+        width: 400px;
+    }
+}
+
+@media (min-width: 3840px) {
+    .workspace-sidebar {
+        width: 500px;
+    }
+
+    .workspace-main {
+        font-size: 1.2rem;
+    }
+}

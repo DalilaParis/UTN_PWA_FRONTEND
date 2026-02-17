@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router'
+import React, { useState, useEffect, useContext } from 'react'
+import { Link, useNavigate } from 'react-router'
 import useWorkspaceDetails from '../../hooks/useWorkspaceDetails'
 import useChannel from '../../hooks/useChannel'
-import { inviteUser } from '../../services/workspaceService'
+import { inviteUser, getMembers, deleteWorkspace } from '../../services/workspaceService'
+import { WorkspaceContext } from '../../Context/WorkspaceContext'
 import './WorkspaceScreen.css' // We'll create a basic CSS file for layout
 
 const WorkspaceScreen = () => {
+    const navigate = useNavigate()
+    const { refreshWorkspaces } = useContext(WorkspaceContext)
     const {
         workspace,
+        member,
         channels,
         loading: workspaceLoading,
         error: workspaceError,
@@ -21,6 +25,14 @@ const WorkspaceScreen = () => {
     const [showInviteModal, setShowInviteModal] = useState(false)
     const [inviteEmail, setInviteEmail] = useState('')
     const [inviteStatus, setInviteStatus] = useState(null) // { type: 'success' | 'error', message: '' }
+
+    // State for Members Modal
+    const [showMembersModal, setShowMembersModal] = useState(false)
+    const [members, setMembers] = useState([])
+    const [membersLoading, setMembersLoading] = useState(false)
+
+    // State for Mobile Menu
+    const [showMobileMenu, setShowMobileMenu] = useState(false)
 
     const handleInvite = async (e) => {
         e.preventDefault()
@@ -38,6 +50,31 @@ const WorkspaceScreen = () => {
         }
     }
 
+    const handleShowMembers = async () => {
+        setShowMembersModal(true)
+        setMembersLoading(true)
+        try {
+            const response = await getMembers(workspace._id)
+            setMembers(response.data.members)
+        } catch (err) {
+            console.error("Failed to fetch members", err)
+        } finally {
+            setMembersLoading(false)
+        }
+    }
+
+    const handleDeleteWorkspace = async () => {
+        if (window.confirm('Are you sure you want to delete this workspace? This action cannot be undone.')) {
+            try {
+                await deleteWorkspace(workspace._id)
+                refreshWorkspaces()
+                navigate('/home')
+            } catch (err) {
+                alert('Failed to delete workspace: ' + (err.message || 'Unknown error'))
+            }
+        }
+    }
+
     // Select first channel by default when channels are loaded
     useEffect(() => {
         if (!selectedChannelId && channels.length > 0) {
@@ -51,27 +88,59 @@ const WorkspaceScreen = () => {
 
     return (
         <div className="workspace-container">
-            <div className="workspace-sidebar">
+            <div className="mobile-header">
+                <button className="mobile-menu-toggle" onClick={() => setShowMobileMenu(true)}>☰</button>
+                <div style={{ fontWeight: 'bold' }}>{workspace.title}</div>
+            </div>
+
+            <div className={`workspace-sidebar ${showMobileMenu ? 'show' : ''}`}>
                 <div className="workspace-header">
-                    <Link to="/home" className="back-button">← Back to Home</Link>
-                    <h2>{workspace.title}</h2>
-                    <button
-                        onClick={() => setShowInviteModal(true)}
-                        style={{
-                            marginTop: '10px',
-                            background: 'transparent',
-                            border: '1px solid rgba(255,255,255,0.3)',
-                            color: 'white',
-                            padding: '5px 10px',
-                            borderRadius: '4px',
-                            cursor: 'pointer',
-                            fontSize: '0.8rem',
-                            display: 'block',
-                            width: '100%'
-                        }}
-                    >
-                        + Invite People
-                    </button>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Link to="/home" className="back-button" style={{ marginBottom: '10px', display: 'inline-block' }}>← Back to Home</Link>
+                        <button className="mobile-menu-toggle" onClick={() => setShowMobileMenu(false)} style={{ color: 'white', marginBottom: '10px' }}>×</button>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        {workspace.image ? (
+                            <img src={workspace.image} alt={workspace.title} style={{ width: '36px', height: '36px', borderRadius: '4px', objectFit: 'cover' }} />
+                        ) : (
+                            <div style={{ width: '36px', height: '36px', borderRadius: '4px', backgroundColor: 'rgba(255,255,255,0.2)', color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold' }}>
+                                {workspace.title.charAt(0).toUpperCase()}
+                            </div>
+                        )}
+                        <h2 style={{ margin: 0, fontSize: '1.2rem' }}>{workspace.title}</h2>
+                    </div>
+                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
+                        <button
+                            onClick={() => setShowInviteModal(true)}
+                            style={{
+                                background: 'transparent',
+                                border: '1px solid rgba(255,255,255,0.3)',
+                                color: 'white',
+                                padding: '5px 10px',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                fontSize: '0.8rem',
+                                flex: 1
+                            }}
+                        >
+                            + Invite
+                        </button>
+                        <button
+                            onClick={handleShowMembers}
+                            style={{
+                                background: 'rgba(255,255,255,0.1)',
+                                border: 'none',
+                                color: 'white',
+                                padding: '5px 10px',
+                                borderRadius: '4px',
+                                cursor: 'pointer',
+                                fontSize: '0.8rem',
+                                flex: 1
+                            }}
+                        >
+                            Members
+                        </button>
+                    </div>
                 </div>
                 <div className="channels-list">
                     <h3>Channels</h3>
@@ -162,6 +231,65 @@ const WorkspaceScreen = () => {
                                 </button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* Members Modal */}
+            {showMembersModal && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
+                }}>
+                    <div style={{
+                        backgroundColor: 'white', padding: '20px', borderRadius: '8px', width: '500px',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', color: '#1d1c1d',
+                        maxHeight: '80vh', display: 'flex', flexDirection: 'column'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
+                            <h3 style={{ margin: 0 }}>Members of {workspace.title}</h3>
+                            <button onClick={() => setShowMembersModal(false)} style={{ background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer' }}>×</button>
+                        </div>
+
+                        <div style={{ flex: 1, overflowY: 'auto', marginBottom: '15px' }}>
+                            {membersLoading ? (
+                                <div>Loading members...</div>
+                            ) : (
+                                <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
+                                    {members.map(m => (
+                                        <li key={m._id} style={{ padding: '10px 0', borderBottom: '1px solid #eee', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                            <div style={{
+                                                width: '36px', height: '36px', borderRadius: '4px',
+                                                backgroundColor: stringToColor(m.fk_id_user?.username || 'User'),
+                                                color: 'white', display: 'flex', justifyContent: 'center', alignItems: 'center', fontWeight: 'bold'
+                                            }}>
+                                                {(m.fk_id_user?.username || 'U').charAt(0).toUpperCase()}
+                                            </div>
+                                            <div>
+                                                <div style={{ fontWeight: 'bold' }}>{m.fk_id_user?.username || 'Unknown User'}</div>
+                                                <div style={{ fontSize: '0.8rem', color: '#616061' }}>{m.fk_id_user?.email} • {m.role}</div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            )}
+                        </div>
+
+                        {member && member.role === 'Owner' && (
+                            <div style={{ borderTop: '1px solid #eee', paddingTop: '15px', marginTop: 'auto' }}>
+                                <button
+                                    onClick={handleDeleteWorkspace}
+                                    style={{
+                                        background: '#e01e5a', color: 'white', border: 'none', padding: '8px 16px', borderRadius: '4px', cursor: 'pointer', width: '100%'
+                                    }}
+                                >
+                                    Delete Workspace
+                                </button>
+                                <div style={{ textAlign: 'center', fontSize: '0.8rem', color: '#616061', marginTop: '5px' }}>
+                                    Warning: This action cannot be undone.
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
