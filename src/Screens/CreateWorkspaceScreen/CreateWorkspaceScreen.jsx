@@ -14,55 +14,62 @@ const CreateWorkspaceScreen = () => {
     } = useCreateWorkspace();
 
     return (
-        <div className="create-workspace-container">
-            <div className="create-workspace-card">
-                <header className="create-workspace-header">
-                    <h1>Crear un nuevo espacio de trabajo</h1>
-                    <p>Los espacios de trabajo son tu manera de comunicarte.</p>
-                </header>
+        <div className="auth-container">
+            <div className="auth-card" style={{ maxWidth: '600px' }}>
+                <div className="auth-header">
+                    <h1>Create a new workspace</h1>
+                    <p>Workspaces are your way to communicate.</p>
+                </div>
 
-                <form className="workspace-form" onSubmit={onSubmitForm}>
-                    <div className="form-group">
-                        <label htmlFor="title" className="form-label">Nombre del espacio de trabajo</label>
+                <form className="auth-form" onSubmit={onSubmitForm}>
+                    <div>
+                        <label htmlFor="title">Workspace Name</label>
                         <input
                             type="text"
                             id="title"
                             name="title"
-                            className="form-input"
-                            placeholder="Ej. Proyecto Alpha"
+                            placeholder="Ex. Project Alpha"
                             value={form_state.title}
                             onChange={onChangeFieldValue}
                             disabled={isLoading}
                         />
-                        {errors.title && <span className="error-message">⚠️ {errors.title}</span>}
+                        {errors.title && <div style={{ color: '#e01e5a', fontSize: '0.9rem' }}>{errors.title}</div>}
                     </div>
 
-                    <div className="form-group">
-                        <label htmlFor="description" className="form-label">Descripción</label>
+                    <div>
+                        <label htmlFor="description">Description</label>
                         <textarea
                             id="description"
                             name="description"
-                            className="form-textarea"
-                            placeholder="¿De qué trata este espacio?"
+                            placeholder="What is this workspace about?"
                             value={form_state.description}
                             onChange={onChangeFieldValue}
                             disabled={isLoading}
+                            style={{
+                                width: '100%',
+                                padding: '10px 12px',
+                                border: '1px solid var(--slack-border)',
+                                borderRadius: '4px',
+                                fontSize: '1rem',
+                                minHeight: '100px',
+                                fontFamily: 'inherit'
+                            }}
                         />
-                        <div className={`char-counter ${form_state.description.length > 900 ? 'limit-near' : ''} ${form_state.description.length >= 1000 ? 'limit-reached' : ''}`}>
+                        <div style={{ textAlign: 'right', fontSize: '0.8rem', color: '#616061' }}>
                             {form_state.description.length} / 1000
                         </div>
-                        {errors.description && <span className="error-message">⚠️ {errors.description}</span>}
+                        {errors.description && <div style={{ color: '#e01e5a', fontSize: '0.9rem' }}>{errors.description}</div>}
                     </div>
 
-                    {error && <div className="error-message">Error al crear el workspace: {error.message}</div>}
+                    {error && <div style={{ color: '#e01e5a', marginBottom: '10px' }}>Error: {error.message}</div>}
 
-                    <button type="submit" className="submit-btn" disabled={form_state.description.length > 1000 || isLoading}>
-                        {isLoading ? 'Creando...' : 'Crear espacio de trabajo'}
+                    <button type="submit" className="btn-primary" disabled={form_state.description.length > 1000 || isLoading}>
+                        {isLoading ? 'Creating...' : 'Create Workspace'}
                     </button>
                 </form>
 
-                <div className="back-link">
-                    <Link to="/home">Volver a la lista de workspaces</Link>
+                <div className="auth-footer">
+                    <Link to="/home">Back to workspaces</Link>
                 </div>
             </div>
         </div>

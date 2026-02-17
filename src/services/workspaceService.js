@@ -1,40 +1,25 @@
-import { ServerError } from "../utils/errorUtils"
+import { http } from "../utils/http"
 
-const URL_API = import.meta.env.VITE_API_URL
 export async function getWorkspaceList() {
-    const response_http = await fetch(
-        URL_API + '/api/workspace',
-        {
-            method: 'GET',
-            headers: {
-                 'x-api-key': import.meta.env.VITE_API_KEY,
-                'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-            },
-        }
-    )
-    const response = await response_http.json()
-    if (!response.ok) {
-        throw new ServerError(response.message, response.status)
-    }
-    return response
+    return await http.get('/api/workspace')
 }
 
 export async function createWorkspace(workspace_data) {
-    const response_http = await fetch(
-        URL_API + '/api/workspace',
-        {
-            method: 'POST',
-            headers: {
-                 'x-api-key': import.meta.env.VITE_API_KEY,
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + localStorage.getItem('auth_token'),
-            },
-            body: JSON.stringify(workspace_data)
-        }
-    )
-    const response = await response_http.json()
-    if (!response.ok) {
-        throw new ServerError(response.message, response.status)
-    }
-    return response
+    return await http.post('/api/workspace', workspace_data)
+}
+
+export async function getWorkspaceById(workspace_id) {
+    return await http.get(`/api/workspace/${workspace_id}`)
+}
+
+export async function getChannels(workspace_id) {
+    return await http.get(`/api/workspace/${workspace_id}/channels`)
+}
+
+export async function createChannel(workspace_id, name) {
+    return await http.post(`/api/workspace/${workspace_id}/channels`, { name })
+}
+
+export async function inviteUser(workspace_id, email) {
+    return await http.post(`/api/workspace/${workspace_id}/members`, { email, role: 'member' })
 }

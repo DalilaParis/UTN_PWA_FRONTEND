@@ -15,57 +15,63 @@ const RegisterScreen = () => {
         response
     } = useRegister()
     return (
-        <div>
-            <h1>Registrate en la aplicacion</h1>
-            <form onSubmit={onSubmitForm}>
-                <div>
-                    <label htmlFor="username">Nombre de usuario:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={form_state.username}
-                        onChange={onChangeFieldValue}
-                    />
+        <div className="auth-container">
+            <div className="auth-card">
+                <div className="auth-header">
+                    <h1>Slaque</h1>
+                    <p>Join Slaque today</p>
                 </div>
-                <div>
-                    <label htmlFor="password">Contraseña:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={form_state.password}
-                        onChange={onChangeFieldValue}
-                    />
+                <form onSubmit={onSubmitForm} className="auth-form">
+                    <div>
+                        <label htmlFor="username">Username</label>
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="Your username"
+                            value={form_state.username}
+                            onChange={onChangeFieldValue}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="email">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="name@work-email.com"
+                            value={form_state.email}
+                            onChange={onChangeFieldValue}
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="password">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Create a password"
+                            value={form_state.password}
+                            onChange={onChangeFieldValue}
+                        />
+                    </div>
+                    {
+                        error && <div style={{ color: '#e01e5a', marginBottom: '10px' }}>{error.message}</div>
+                    }
+                    {
+                        response && response.ok &&
+                        <div style={{ color: '#007a5a', marginBottom: '10px' }}>
+                            Registration successful! Check your email.
+                        </div>
+                    }
+                    <button type="submit" className="btn-primary" disabled={loading}>
+                        {loading ? 'Registering...' : 'Register'}
+                    </button>
+                </form>
+                <div className="auth-footer">
+                    Already using Slaque? <Link to="/login">Sign in</Link>
                 </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={form_state.email}
-                        onChange={onChangeFieldValue}
-                    />
-                </div>
-                {
-                    error && <span style={{ color: 'red' }}>{error.message}</span>
-                }
-                {
-                    response
-                    &&
-                    response.ok
-                    &&
-                    <span style={{ color: 'yellowgreen' }}>
-                        Usuario registrado exitosamente, te enviaremos un mail con instrucciones.
-                    </span>
-                }
-                <br />
-                <button type="submit" disabled={loading}>Registrarse</button>
-            </form>
-            <span>
-                Ya tienes una cuenta? <Link to="/login">iniciar sesion</Link>
-            </span>
+            </div>
         </div>
     )
 }

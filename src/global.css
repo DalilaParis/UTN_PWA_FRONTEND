@@ -1,0 +1,192 @@
+:root {
+    --slack-purple: #3F0E40;
+    --slack-purple-dark: #350d36;
+    --slack-blue: #1164A3;
+    --slack-blue-hover: #0c4b7b;
+    --slack-green: #007a5a;
+    --slack-green-hover: #148567;
+    --slack-text: #1d1c1d;
+    --slack-text-secondary: #616061;
+    --slack-border: #dddddd;
+    --slack-bg: #ffffff;
+    --slack-bg-secondary: #f8f8f8;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: 'Lato', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--slack-bg);
+    color: var(--slack-text);
+    -webkit-font-smoothing: antialiased;
+}
+
+a {
+    color: var(--slack-blue);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Global Button Style */
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: var(--slack-green);
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+    background-color: var(--slack-green-hover);
+}
+
+.btn-secondary {
+    background-color: white;
+    color: var(--slack-text);
+    border: 1px solid var(--slack-border);
+    padding: 10px 18px;
+    font-weight: bold;
+    border-radius: 4px;
+    font-size: 1rem;
+    transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: var(--slack-bg-secondary);
+}
+
+/* Forms */
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    border: 1px solid var(--slack-border);
+    border-radius: 4px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    border-color: var(--slack-blue);
+    box-shadow: 0 0 0 1px var(--slack-blue);
+}
+
+label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: var(--slack-text);
+}
+
+/* Auth Pages Container */
+.auth-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+    background-color: var(--slack-bg);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    padding: 0;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.auth-header h1 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    margin: 0;
+    color: var(--slack-text);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--slack-text-secondary);
+}
+
+/* Home/Workspace List */
+.home-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+.home-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    border-bottom: 1px solid var(--slack-border);
+    padding-bottom: 20px;
+}
+
+.workspace-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.workspace-card {
+    border: 1px solid var(--slack-border);
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: box-shadow 0.2s, border-color 0.2s;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    text-decoration: none;
+    color: var(--slack-text);
+}
+
+.workspace-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: var(--slack-border);
+    /* Keep border or change */
+    text-decoration: none;
+}
+
+.workspace-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: bold;
+}

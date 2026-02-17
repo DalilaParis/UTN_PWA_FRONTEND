@@ -1,0 +1,240 @@
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router'
+import useWorkspaceDetails from '../../hooks/useWorkspaceDetails'
+import useChannel from '../../hooks/useChannel'
+import { inviteUser } from '../../services/workspaceService'
+import './WorkspaceScreen.css' // We'll create a basic CSS file for layout
+
+const WorkspaceScreen = () => {
+    const {
+        workspace,
+        channels,
+        loading: workspaceLoading,
+        error: workspaceError,
+        handleCreateChannel
+    } = useWorkspaceDetails()
+
+    const [selectedChannelId, setSelectedChannelId] = useState(null)
+    const [newChannelName, setNewChannelName] = useState('')
+
+    // State for Invite Modal
+    const [showInviteModal, setShowInviteModal] = useState(false)
+    const [inviteEmail, setInviteEmail] = useState('')
+    const [inviteStatus, setInviteStatus] = useState(null) // { type: 'success' | 'error', message: '' }
+
+    const handleInvite = async (e) => {
+        e.preventDefault()
+        setInviteStatus(null)
+        try {
+            await inviteUser(workspace._id, inviteEmail)
+            setInviteStatus({ type: 'success', message: 'Invitation sent!' })
+            setInviteEmail('')
+            setTimeout(() => {
+                setShowInviteModal(false)
+                setInviteStatus(null)
+            }, 2000)
+        } catch (err) {
+            setInviteStatus({ type: 'error', message: err.message || 'Failed to invite user.' })
+        }
+    }
+
+    // Select first channel by default when channels are loaded
+    useEffect(() => {
+        if (!selectedChannelId && channels.length > 0) {
+            setSelectedChannelId(channels[0]._id)
+        }
+    }, [channels, selectedChannelId])
+
+    if (workspaceLoading) return <span>Loading workspace...</span>
+    if (workspaceError) return <span>Error loading workspace: {workspaceError.message}</span>
+    if (!workspace) return <span>Workspace not found</span>
+
+    return (
+        <div className="workspace-container">
+            <div className="workspace-sidebar">
+                <div className="workspace-header">
+                    <Link to="/home" className="back-button">← Back to Home</Link>
+                    <h2>{workspace.title}</h2>
+                    <button
+                        onClick={() => setShowInviteModal(true)}
+                        style={{
+                            marginTop: '10px',
+                            background: 'transparent',
+                            border: '1px solid rgba(255,255,255,0.3)',
+                            color: 'white',
+                            padding: '5px 10px',
+                            borderRadius: '4px',
+                            cursor: 'pointer',
+                            fontSize: '0.8rem',
+                            display: 'block',
+                            width: '100%'
+                        }}
+                    >
+                        + Invite People
+                    </button>
+                </div>
+                <div className="channels-list">
+                    <h3>Channels</h3>
+                    <ul>
+                        {channels.map(channel => (
+                            <li
+                                key={channel._id}
+                                onClick={() => setSelectedChannelId(channel._id)}
+                                className={selectedChannelId === channel._id ? 'active' : ''}
+                            >
+                                # {channel.name}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                <div className="create-channel">
+                    <input
+                        type="text"
+                        placeholder="Add channel"
+                        value={newChannelName}
+                        onChange={(e) => setNewChannelName(e.target.value)}
+                    />
+                    <button onClick={() => {
+                        if (newChannelName.trim()) {
+                            handleCreateChannel(newChannelName)
+                            setNewChannelName('')
+                        }
+                    }}>
+                        +
+                    </button>
+                </div>
+            </div>
+            <div className="workspace-main">
+                {selectedChannelId ? (
+                    <ChannelChat channelId={selectedChannelId} channels={channels} />
+                ) : (
+                    <div className="no-channel-selected">Select a channel to start chatting</div>
+                )}
+            </div>
+            {/* Invite Modal */}
+            {showInviteModal && (
+                <div style={{
+                    position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+                    backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000
+                }}>
+                    <div style={{
+                        backgroundColor: 'white', padding: '20px', borderRadius: '8px', width: '400px',
+                        boxShadow: '0 4px 12px rgba(0,0,0,0.15)', color: '#1d1c1d'
+                    }}>
+                        <h3 style={{ marginTop: 0, marginBottom: '15px' }}>Invite people to {workspace.title}</h3>
+                        <form onSubmit={handleInvite}>
+                            <div style={{ marginBottom: '15px' }}>
+                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Email Address</label>
+                                <input
+                                    type="email"
+                                    value={inviteEmail}
+                                    onChange={(e) => setInviteEmail(e.target.value)}
+                                    placeholder="name@example.com"
+                                    required
+                                    style={{
+                                        width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '4px', fontSize: '1rem'
+                                    }}
+                                />
+                            </div>
+                            {inviteStatus && (
+                                <div style={{
+                                    marginBottom: '15px',
+                                    color: inviteStatus.type === 'error' ? '#e01e5a' : '#007a5a',
+                                    fontWeight: 'bold',
+                                    fontSize: '0.9rem'
+                                }}>
+                                    {inviteStatus.message}
+                                </div>
+                            )}
+                            <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                                <button
+                                    type="button"
+                                    onClick={() => setShowInviteModal(false)}
+                                    className="btn-secondary"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    type="submit"
+                                    className="btn-primary"
+                                >
+                                    Send Invitation
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+        </div>
+    )
+}
+
+const ChannelChat = ({ channelId, channels }) => {
+    const { messages, loading, sendMessage } = useChannel(channelId)
+    const [newMessage, setNewMessage] = useState('')
+
+    // Find channel name for header
+    const channel = channels.find(c => c._id === channelId)
+
+    const handleSend = (e) => {
+        e.preventDefault()
+        if (newMessage.trim()) {
+            sendMessage(newMessage)
+            setNewMessage('')
+        }
+    }
+
+    return (
+        <div className="channel-chat">
+            <div className="channel-header">
+                # {channel ? channel.name : 'channel'}
+            </div>
+            <div className="messages-list">
+                {messages.map(msg => {
+                    const authorName = msg.fk_workspace_member_id?.fk_id_user?.username || msg.author_name || 'User'
+                    const initial = authorName.charAt(0).toUpperCase()
+                    const time = new Date(msg.created_at || msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+
+                    return (
+                        <div key={msg._id} className="message-item">
+                            <div className="message-avatar" style={{ backgroundColor: stringToColor(authorName) }}>
+                                {initial}
+                            </div>
+                            <div className="message-body">
+                                <div className="message-header">
+                                    <span className="message-author">{authorName}</span>
+                                    <span className="message-time">{time}</span>
+                                </div>
+                                <div className="message-content">{msg.mensaje || msg.content}</div>
+                            </div>
+                        </div>
+                    )
+                })}
+                {messages.length === 0 && !loading && <div style={{ padding: '20px', color: '#616061' }}>No messages yet. Be the first to say hi!</div>}
+            </div>
+            <div className="input-area-container">
+                <form className="message-input" onSubmit={handleSend}>
+                    <input
+                        type="text"
+                        value={newMessage}
+                        onChange={(e) => setNewMessage(e.target.value)}
+                        placeholder={`Message #${channel ? channel.name : 'channel'}`}
+                    />
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    )
+}
+
+// Helper to generate consistent color from string
+function stringToColor(str) {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+        hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const c = (hash & 0x00FFFFFF).toString(16).toUpperCase();
+    return '#' + "00000".substring(0, 6 - c.length) + c;
+}
+
+export default WorkspaceScreen

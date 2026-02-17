@@ -7,6 +7,7 @@ import AuthMiddleware from './Middlewares/AuthMiddleware'
 import WorkspaceContextProvider from './Context/WorkspaceContext'
 import HomeScreen from './Screens/HomeScreen/HomeScreen'
 import CreateWorkspaceScreen from './Screens/CreateWorkspaceScreen/CreateWorkspaceScreen'
+import WorkspaceScreen from './Screens/WorkspaceScreen/WorkspaceScreen'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
             </WorkspaceContextProvider>
           } />
           <Route path='/create-workspace' element={<CreateWorkspaceScreen />} />
+          <Route path='/workspace/:workspace_id' element={<WorkspaceScreen />} />
         </Route>
       </Routes>
     </AuthContextProvider>

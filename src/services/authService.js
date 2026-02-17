@@ -5,7 +5,7 @@ const URL_API = import.meta.env.VITE_API_URL
 
 export async function login(email, password) {
     const response_http = await fetch(
-        URL_API + 'api/auth/login',
+        URL_API + '/api/auth/login',
         {
             method: 'POST',
             headers: {
@@ -28,7 +28,7 @@ export async function login(email, password) {
 
 export async function register(username, password, email) {
     const response_http = await fetch(
-        URL_API + 'api/auth/register',
+        URL_API + '/api/auth/register',
         {
             method: 'POST',
             headers: {
