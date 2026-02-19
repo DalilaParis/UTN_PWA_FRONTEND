@@ -6,6 +6,13 @@ import { getMessages, createMessage } from '../services/channelService'
 const useChannel = (channelId) => {
     const { workspace_id } = useParams()
     const [messages, setMessages] = useState([])
+    const [hasFetchedOnce, setHasFetchedOnce] = useState(false)
+    const [prevChannelId, setPrevChannelId] = useState(channelId)
+
+    if (channelId !== prevChannelId) {
+        setPrevChannelId(channelId)
+        setHasFetchedOnce(false)
+    }
 
     const messagesRequest = useRequest()
     const sendMessageRequest = useRequest()
@@ -15,6 +22,7 @@ const useChannel = (channelId) => {
         try {
             const data = await messagesRequest.sendRequest(() => getMessages(workspace_id, channelId))
             setMessages(data.data.messages)
+            setHasFetchedOnce(true)
         } catch (err) {
             console.error(err)
         }
@@ -22,15 +30,14 @@ const useChannel = (channelId) => {
 
     useEffect(() => {
         fetchMessages()
-        // Simple polling every 3 seconds
-        const interval = setInterval(fetchMessages, 3000)
+        const interval = setInterval(fetchMessages, 1000)
         return () => clearInterval(interval)
     }, [workspace_id, channelId])
 
     const handleSendMessage = async (content) => {
         try {
             await sendMessageRequest.sendRequest(() => createMessage(workspace_id, channelId, content))
-            fetchMessages() // Refresh immediately
+            fetchMessages()
         } catch (err) {
             console.error(err)
         }
@@ -41,7 +48,8 @@ const useChannel = (channelId) => {
         loading: messagesRequest.loading,
         error: messagesRequest.error,
         sendMessage: handleSendMessage,
-        sending: sendMessageRequest.loading
+        sending: sendMessageRequest.loading,
+        hasFetchedOnce
     }
 }
 

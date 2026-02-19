@@ -4,7 +4,7 @@ import useWorkspaceDetails from '../../hooks/useWorkspaceDetails'
 import useChannel from '../../hooks/useChannel'
 import { inviteUser, getMembers, deleteWorkspace } from '../../services/workspaceService'
 import { WorkspaceContext } from '../../Context/WorkspaceContext'
-import './WorkspaceScreen.css' // We'll create a basic CSS file for layout
+import './WorkspaceScreen.css'
 
 const WorkspaceScreen = () => {
     const navigate = useNavigate()
@@ -21,17 +21,17 @@ const WorkspaceScreen = () => {
     const [selectedChannelId, setSelectedChannelId] = useState(null)
     const [newChannelName, setNewChannelName] = useState('')
 
-    // State for Invite Modal
+
     const [showInviteModal, setShowInviteModal] = useState(false)
     const [inviteEmail, setInviteEmail] = useState('')
-    const [inviteStatus, setInviteStatus] = useState(null) // { type: 'success' | 'error', message: '' }
+    const [inviteStatus, setInviteStatus] = useState(null)
 
-    // State for Members Modal
+
     const [showMembersModal, setShowMembersModal] = useState(false)
     const [members, setMembers] = useState([])
     const [membersLoading, setMembersLoading] = useState(false)
 
-    // State for Mobile Menu
+
     const [showMobileMenu, setShowMobileMenu] = useState(false)
 
     const handleInvite = async (e) => {
@@ -75,7 +75,6 @@ const WorkspaceScreen = () => {
         }
     }
 
-    // Select first channel by default when channels are loaded
     useEffect(() => {
         if (!selectedChannelId && channels.length > 0) {
             setSelectedChannelId(channels[0]._id)
@@ -123,7 +122,7 @@ const WorkspaceScreen = () => {
                                 flex: 1
                             }}
                         >
-                            + Invite
+                            + Invitar
                         </button>
                         <button
                             onClick={handleShowMembers}
@@ -138,12 +137,12 @@ const WorkspaceScreen = () => {
                                 flex: 1
                             }}
                         >
-                            Members
+                            Miembros
                         </button>
                     </div>
                 </div>
                 <div className="channels-list">
-                    <h3>Channels</h3>
+                    <h3>Canal</h3>
                     <ul>
                         {channels.map(channel => (
                             <li
@@ -159,7 +158,7 @@ const WorkspaceScreen = () => {
                 <div className="create-channel">
                     <input
                         type="text"
-                        placeholder="Add channel"
+                        placeholder="Crear canal"
                         value={newChannelName}
                         onChange={(e) => setNewChannelName(e.target.value)}
                     />
@@ -177,10 +176,10 @@ const WorkspaceScreen = () => {
                 {selectedChannelId ? (
                     <ChannelChat channelId={selectedChannelId} channels={channels} />
                 ) : (
-                    <div className="no-channel-selected">Select a channel to start chatting</div>
+                    <div className="no-channel-selected">Selecciona un canal para comenzar a chatear</div>
                 )}
             </div>
-            {/* Invite Modal */}
+
             {showInviteModal && (
                 <div style={{
                     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -190,10 +189,10 @@ const WorkspaceScreen = () => {
                         backgroundColor: 'white', padding: '20px', borderRadius: '8px', width: '400px',
                         boxShadow: '0 4px 12px rgba(0,0,0,0.15)', color: '#1d1c1d'
                     }}>
-                        <h3 style={{ marginTop: 0, marginBottom: '15px' }}>Invite people to {workspace.title}</h3>
+                        <h3 style={{ marginTop: 0, marginBottom: '15px' }}>Invitar a {workspace.title}</h3>
                         <form onSubmit={handleInvite}>
                             <div style={{ marginBottom: '15px' }}>
-                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Email Address</label>
+                                <label style={{ display: 'block', marginBottom: '5px', fontWeight: 'bold' }}>Email</label>
                                 <input
                                     type="email"
                                     value={inviteEmail}
@@ -221,13 +220,13 @@ const WorkspaceScreen = () => {
                                     onClick={() => setShowInviteModal(false)}
                                     className="btn-secondary"
                                 >
-                                    Cancel
+                                    Cancelar
                                 </button>
                                 <button
                                     type="submit"
                                     className="btn-primary"
                                 >
-                                    Send Invitation
+                                    Enviar invitación
                                 </button>
                             </div>
                         </form>
@@ -235,7 +234,7 @@ const WorkspaceScreen = () => {
                 </div>
             )}
 
-            {/* Members Modal */}
+
             {showMembersModal && (
                 <div style={{
                     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -247,13 +246,13 @@ const WorkspaceScreen = () => {
                         maxHeight: '80vh', display: 'flex', flexDirection: 'column'
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-                            <h3 style={{ margin: 0 }}>Members of {workspace.title}</h3>
+                            <h3 style={{ margin: 0 }}>Miembros de {workspace.title}</h3>
                             <button onClick={() => setShowMembersModal(false)} style={{ background: 'none', border: 'none', fontSize: '1.2rem', cursor: 'pointer' }}>×</button>
                         </div>
 
                         <div style={{ flex: 1, overflowY: 'auto', marginBottom: '15px' }}>
                             {membersLoading ? (
-                                <div>Loading members...</div>
+                                <div>Cargando miembros...</div>
                             ) : (
                                 <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                                     {members.map(m => (
@@ -298,10 +297,9 @@ const WorkspaceScreen = () => {
 }
 
 const ChannelChat = ({ channelId, channels }) => {
-    const { messages, loading, sendMessage } = useChannel(channelId)
+    const { messages, loading, sendMessage, hasFetchedOnce } = useChannel(channelId)
     const [newMessage, setNewMessage] = useState('')
 
-    // Find channel name for header
     const channel = channels.find(c => c._id === channelId)
 
     const handleSend = (e) => {
@@ -338,7 +336,9 @@ const ChannelChat = ({ channelId, channels }) => {
                         </div>
                     )
                 })}
-                {messages.length === 0 && !loading && <div style={{ padding: '20px', color: '#616061' }}>No messages yet. Be the first to say hi!</div>}
+                {messages.length === 0 && hasFetchedOnce && !loading && (
+                    <div style={{ padding: '20px', color: '#616061' }}>No hay mensajes aun. Di hola!</div>
+                )}
             </div>
             <div className="input-area-container">
                 <form className="message-input" onSubmit={handleSend}>
@@ -346,16 +346,15 @@ const ChannelChat = ({ channelId, channels }) => {
                         type="text"
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder={`Message #${channel ? channel.name : 'channel'}`}
+                        placeholder={`Escribe un mensaje en #${channel ? channel.name : 'channel'}`}
                     />
-                    <button type="submit">Send</button>
+                    <button type="submit">Enviar</button>
                 </form>
             </div>
         </div>
     )
 }
 
-// Helper to generate consistent color from string
 function stringToColor(str) {
     let hash = 0;
     for (let i = 0; i < str.length; i++) {

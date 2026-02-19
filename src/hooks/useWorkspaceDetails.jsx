@@ -20,12 +20,10 @@ const useWorkspaceDetails = () => {
         const fetchData = async () => {
             setLoading(true)
             try {
-                // Fetch workspace details
                 const workspaceData = await workspaceRequest.sendRequest(() => getWorkspaceById(workspace_id))
                 setWorkspace(workspaceData.data.workspace)
                 setMember(workspaceData.data.member)
 
-                // Fetch channels
                 const channelsData = await channelsRequest.sendRequest(() => getChannels(workspace_id))
                 setChannels(channelsData.data.channels)
             } catch (err) {
@@ -43,7 +41,6 @@ const useWorkspaceDetails = () => {
     const handleCreateChannel = async (name) => {
         try {
             await createChannelRequest.sendRequest(() => createChannel(workspace_id, name))
-            // Refresh channels
             const channelsData = await channelsRequest.sendRequest(() => getChannels(workspace_id))
             setChannels(channelsData.data.channels)
         } catch (err) {

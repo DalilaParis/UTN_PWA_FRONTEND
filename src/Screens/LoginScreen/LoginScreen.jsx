@@ -35,12 +35,12 @@ const LoginScreen = () => {
                         />
                     </div>
                     <div>
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="password">Contraseña</label>
                         <input
                             type="password"
                             id="password"
                             name="password"
-                            placeholder="Your password"
+                            placeholder="Contraseña"
                             onChange={onChangeFieldValue}
                             value={form_state.password}
                         />

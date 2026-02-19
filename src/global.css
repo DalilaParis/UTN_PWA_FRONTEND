@@ -33,7 +33,6 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Global Button Style */
 button {
     font-family: inherit;
     cursor: pointer;
@@ -73,7 +72,6 @@ button {
     background-color: var(--slack-bg-secondary);
 }
 
-/* Forms */
 input[type="text"],
 input[type="email"],
 input[type="password"] {
@@ -101,7 +99,6 @@ label {
     color: var(--slack-text);
 }
 
-/* Auth Pages Container */
 .auth-container {
     display: flex;
     flex-direction: column;
@@ -143,7 +140,6 @@ label {
     color: var(--slack-text-secondary);
 }
 
-/* Home/Workspace List */
 .home-container {
     max-width: 800px;
     margin: 0 auto;
@@ -176,7 +172,6 @@ label {
     flex-direction: column;
     height: 150px;
     width: calc(33.333% - 14px);
-    /* Default 3 columns */
     min-width: 250px;
     justify-content: center;
     align-items: center;
@@ -197,9 +192,7 @@ label {
     font-weight: bold;
 }
 
-/* Responsiveness Targets: 320px, 750px, 3840px */
 
-/* Mobile / Small Screens (from 320px) */
 @media (max-width: 750px) {
     .mobile-header {
         display: flex;
@@ -229,7 +222,6 @@ label {
     }
 }
 
-/* Large Screens / 4K (up to 3840px) */
 @media (min-width: 2560px) {
     .mobile-header {
         display: none;
@@ -241,7 +233,6 @@ label {
 
     .workspace-card {
         width: calc(25% - 15px);
-        /* 4 columns on very large screens */
         height: 200px;
     }
 }
