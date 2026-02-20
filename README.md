@@ -1,17 +1,15 @@
-# React + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
 # UTN_PWA_FRONTEND
+
+Este proyecto es una maqueta para una app de mensajería similar a slack.
+
+# INSTRUCCIONES:
+
+1. Abrir carpeta con visual studio code.
+2. Utilizar el comando Ctrl + Ñ para abrir la terminal.
+3. Correr el código "npm i" para instalar las dependencias.
+4. Una vez instalado, utilizar el código "npm run dev" para conectar con el servidor.
+5. Clickear en el link "http://localhost:5173/" que aparecerá en consola manteniendo Ctrl.
+
+# Variables de entorno:
+
+VITE_API_URL= Link del backend

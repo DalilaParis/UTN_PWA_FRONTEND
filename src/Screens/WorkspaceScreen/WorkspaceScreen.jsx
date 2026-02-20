@@ -95,7 +95,7 @@ const WorkspaceScreen = () => {
             <div className={`workspace-sidebar ${showMobileMenu ? 'show' : ''}`}>
                 <div className="workspace-header">
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Link to="/home" className="back-button" style={{ marginBottom: '10px', display: 'inline-block' }}>← Back to Home</Link>
+                        <Link to="/home" className="back-button" style={{ marginBottom: '10px', display: 'inline-block' }}>← Volver al Home</Link>
                         <button className="mobile-menu-toggle" onClick={() => setShowMobileMenu(false)} style={{ color: 'white', marginBottom: '10px' }}>×</button>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
